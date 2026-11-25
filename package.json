@@ -1,0 +1,16 @@
+{
+  "name": "trophic-arena",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A sealed-seed artificial life forecasting game for humans and bots.",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test",
+    "verify": "node cli.mjs verify",
+    "build:pages": "node scripts/build-pages.mjs"
+  }
+}

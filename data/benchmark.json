@@ -1,0 +1,34 @@
+{
+  "engineVersion": "trophic-1",
+  "trainingWorlds": 128,
+  "holdoutWorlds": 64,
+  "neighbors": 12,
+  "brier": {
+    "fieldAgent": 0.19356988400829078,
+    "trainingPrevalence": 0.22471110026041666,
+    "always50": 0.25
+  },
+  "byQuestion": [
+    {
+      "id": "grazerRecovery",
+      "yes": 41,
+      "bot": 0.2011519451530612,
+      "baseRate": 0.236328125,
+      "coin": 0.25
+    },
+    {
+      "id": "hunterSurvival",
+      "yes": 17,
+      "bot": 0.1549084721779336,
+      "baseRate": 0.20538330078125,
+      "coin": 0.25
+    },
+    {
+      "id": "greenFinish",
+      "yes": 21,
+      "bot": 0.22464923469387757,
+      "baseRate": 0.232421875,
+      "coin": 0.25
+    }
+  ]
+}

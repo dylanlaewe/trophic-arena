@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111913">
+  <meta name="description" content="Watch an artificial ecosystem, forecast its future, and put your judgment up against a trained baseline.">
+  <title>Trophic Arena · Artificial-life forecasting</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%23111913'/%3E%3Cg fill='%23c4ec85'%3E%3Cellipse cx='15' cy='22' rx='7' ry='13' transform='rotate(-43 15 22)'/%3E%3Cellipse cx='32' cy='18' rx='7' ry='13' transform='rotate(40 32 18)'/%3E%3Cellipse cx='24' cy='34' rx='5' ry='8'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the arena</a>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./" aria-label="Trophic Arena home">
+        <span class="spore" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Trophic<span class="brand-light"> Arena</span></span>
+      </a>
+      <nav aria-label="Arena tools">
+        <button type="button" class="text-button" id="help">Field guide</button>
+        <button type="button" class="outline-button" id="new-room"><span aria-hidden="true">＋</span> New room</button>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap" id="main">
+    <div class="intro">
+      <div>
+        <div class="eyebrow"><span class="signal" aria-hidden="true"></span> Artificial-life forecasting</div>
+        <h1>Observation deck<span>.</span></h1>
+        <p>Watch a living world for 48 ticks. Call what happens by tick 192.</p>
+      </div>
+      <div class="room-tag">
+        <div><span class="field-label">Room code</span><strong id="room-code">······</strong></div>
+        <button type="button" class="icon-button" id="share" title="Copy room link" aria-label="Copy room link" disabled>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7 13 6-6m-5-2 2-2a4 4 0 0 1 6 6l-2 2m-2 4-2 2a4 4 0 0 1-6-6l2-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <div class="observatory">
+        <section class="chamber" aria-labelledby="biome">
+          <div class="chamber-head">
+            <div>
+              <span class="field-label">Habitat feed</span>
+              <h2 id="biome">Initializing habitat</h2>
+            </div>
+            <span class="stage"><i aria-hidden="true"></i><span id="stage">Connecting</span></span>
+          </div>
+          <div class="viewport">
+            <canvas id="world" width="900" height="600" aria-label="Overhead habitat map showing grazers, hunters and plants. Population counts follow the replay controls.">Population counts and a field log follow.</canvas>
+            <span class="map-corner tl" aria-hidden="true"></span><span class="map-corner tr" aria-hidden="true"></span>
+            <span class="map-corner bl" aria-hidden="true"></span><span class="map-corner br" aria-hidden="true"></span>
+            <span class="north" aria-hidden="true"><i></i>N</span>
+          </div>
+          <div class="transport">
+            <button class="play-button" id="play" aria-label="Play tape" disabled>Play</button>
+            <label class="sr-only" for="timeline">Observation tape position</label>
+            <input type="range" id="timeline" min="0" max="12" value="0" disabled>
+            <span class="tick-counter">Tick <b id="tick">000</b></span>
+          </div>
+        </section>
+
+        <div class="telemetry">
+          <section class="panel census" aria-labelledby="census-title">
+            <div class="panel-head"><h2 id="census-title">Population trace</h2></div>
+            <dl class="readings">
+              <div><dt><i class="swatch grazer"></i>Grazers</dt><dd id="grazer-count">–</dd></div>
+              <div><dt><i class="swatch hunter"></i>Hunters</dt><dd id="hunter-count">–</dd></div>
+              <div><dt><i class="swatch food"></i>Plants</dt><dd id="food-count">–</dd></div>
+            </dl>
+            <canvas id="chart" width="520" height="104" role="img" aria-label="Population history of grazers, hunters and plants through the current tick"></canvas>
+          </section>
+          <section class="panel field-log" aria-labelledby="log-title">
+            <div class="panel-head"><h2 id="log-title">Field log</h2></div>
+            <ul id="event-list"><li>Waiting for first observation.</li></ul>
+          </section>
+        </div>
+      </div>
+
+      <aside class="forecast-col">
+        <section class="panel ticket" aria-labelledby="ticket-title">
+          <div class="ticket-heading">
+            <span class="ticket-mark" aria-hidden="true">⌁</span>
+            <div><h2 id="ticket-title">Forecast slip</h2><p>Set the chance of each outcome.</p></div>
+          </div>
+          <form id="forecast-form">
+            <div id="questions"></div>
+            <label class="name-label" for="player-name">Forecaster name</label>
+            <input id="player-name" name="name" type="text" autocomplete="nickname" placeholder="Your callsign" maxlength="24" required>
+            <button class="primary-button" id="submit" type="submit" disabled>Lock forecast</button>
+          </form>
+          <div class="room-status"><span id="entries">0 entries</span><span>vs. Field Agent</span></div>
+          <button class="reveal-button" id="settle" type="button" hidden>Reveal outcome <span aria-hidden="true">↗</span></button>
+          <p class="notice" id="message" role="status" aria-live="polite">Opening a world…</p>
+        </section>
+        <div class="proof" id="proof"></div>
+      </aside>
+    </div>
+    <section class="panel settlement" id="result" aria-labelledby="result-title" hidden>
+      <div class="panel-head"><div><div class="eyebrow">Final settlement</div><h2 id="result-title">Round results</h2></div></div>
+      <div id="ledger"></div>
+      <section class="experiment-panel" aria-labelledby="experiment-title">
+        <h3 id="experiment-title">Highland refuge experiment</h3>
+        <p>Replay this seed with one change. From tick 49, grazers sheltering in highlands are protected from hunters.</p>
+        <button id="refuge" type="button" class="outline-button">Test a highland refuge</button>
+        <div id="experiment" aria-live="polite"></div>
+      </section>
+    </section>
+  </main>
+  <footer class="wrap footer"><span>Trophic Arena</span><a href="https://github.com/dylanlaewe/trophic-arena">Source on GitHub ↗</a></footer>
+
+  <dialog id="guide" aria-labelledby="guide-title">
+    <div class="guide-inner">
+      <div class="guide-head"><div class="eyebrow">Arena reference</div><form method="dialog"><button class="icon-button" aria-label="Close field guide">×</button></form></div>
+      <h2 id="guide-title">Field guide</h2>
+      <ol class="guide-steps">
+        <li><strong>Observe the opening.</strong> Scrub or play the first 48 ticks. Pale grazers feed on plants. Orange hunters feed on grazers. The rocky, ochre terrain marks the highlands. The chart tracks all three populations.</li>
+        <li><strong>Forecast the ending.</strong> Set a probability for each question, enter your callsign and lock the slip. Field Agent makes its own forecast using the opening observations.</li>
+        <li><strong>Reveal the world.</strong> The host settles the round after entries are in. Watch the full 192 ticks and compare your score with the bot and other entrants.</li>
+      </ol>
+      <h3>How scoring works</h3>
+      <p>A correct outcome is 1 for yes and 0 for no. The arena squares the difference between each probability and its outcome. Your score is 100 times one minus the average of those errors. Higher wins.</p>
+      <h3>Solo and group play</h3>
+      <p>The GitHub Pages edition runs solo in your browser. A shared challenge link includes the seed so friends can play the same world. Each browser scores its own forecasts. Run <code>npm start</code> to host on your computer. For a group on the same Wi-Fi, run <code>HOST=0.0.0.0 npm start</code> from the repository. Open the host computer’s LAN address in your browser, then copy that room link for your group.</p>
+      <h3>Verify a multiplayer round</h3>
+      <p>Save the seed commitment before the reveal. After settlement, download the replay receipt and check it with the repository’s verification command.</p>
+    </div>
+  </dialog>
+</body>
+</html>
